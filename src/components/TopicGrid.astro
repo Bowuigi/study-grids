@@ -1,0 +1,66 @@
+---
+export interface Props {
+  topic: string;   // folder name under src/content/topics/
+  title: string;       // displayed as h1
+}
+
+const { topic, title } = Astro.props;
+
+// Import ALL MDX files from all topics
+const allMdxFiles = import.meta.glob('../topics/**/*.mdx');
+
+// Filter only those belonging to this topic
+const topicFiles = Object.entries(allMdxFiles)
+  .filter(([path]) => path.includes(`/topics/${topic}/`));
+
+// Load each file and collect its content
+const notes = [];
+for (const [path, importer] of topicFiles) {
+  const module = await importer() as any;
+  const fileName = path.split('/').pop()?.replace(/\.mdx$/, '') || 'Nota';
+  const noteTitle = module.frontmatter?.title || fileName;
+  notes.push({
+    title: noteTitle,
+    Content: module.default,
+  });
+}
+---
+
+<style is:global>
+  .masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 2rem 10px;
+  }
+  .note-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    break-inside: avoid;
+  }
+  .note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  }
+  .note-card h1 {
+    margin-top: 0;
+    font-size: 1.8rem;
+  }
+  .topic-title {
+    text-align: center;
+  }
+</style>
+
+<h1 class="topic-title">{title}</h1>
+<div class="masonry-grid">
+  {notes.map((note) => (
+    <article class="note-card">
+      <h2>{note.title}</h2>
+      <note.Content />
+    </article>
+  ))}
+</div>
