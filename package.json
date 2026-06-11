@@ -12,6 +12,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.4.5"
+    "@astrojs/markdown-remark": "^7.2.0",
+    "@astrojs/mdx": "^6.0.3",
+    "astro": "^6.4.5",
+    "pikchr-js": "^0.1.4"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4",
+    "@types/unist": "^3.0.3",
+    "mdast-util-to-string": "^4.0.0",
+    "unist-util-visit": "^5.1.0"
   }
 }
