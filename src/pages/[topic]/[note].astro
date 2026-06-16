@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allNotes = await getCollection('notes');
+  return allNotes.map(note => {
+    const [topic, slug] = note.id.split('/');
+    return {
+      params: { topic, note: slug }
+    };
+  });
+}
+
+const { topic, note: noteSlug } = Astro.params;
+const allNotes = await getCollection('notes');
+const entry = allNotes.find(n => n.id === `${topic}/${noteSlug}`);
+
+if (!entry) throw new Error(`Note not found ${topic}/${noteSlug}`);
+
+const { Content } = await render(entry);
+---
+
+<Layout>
+  <h1>{entry.data.title}</h1>
+  <Content />
+</Layout>

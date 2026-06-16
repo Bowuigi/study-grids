@@ -1,7 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allNotes = await getCollection('notes');
+const topics = [...new Set(allNotes.map(note => note.id.split('/')[0]))];
 ---
 
 <Layout>
-  Aquí apareceran las URLs relacionadas a las diferentes grillas con material de estudio que haga.
+  <b>Material de estudio disponible:</b>
+  <ul>
+    {topics.map(topic => (
+      <li><a href={`/${topic}`}>{topic}</li>
+    ))}
+  </ul>
 </Layout>
