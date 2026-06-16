@@ -7,6 +7,9 @@ const topics = [...new Set(allNotes.map(note => note.id.split('/')[0]))];
 ---
 
 <Layout>
+  <h1>Material de estudio</h1>
+  <p>Esta página corresponde a material de estudio sobre temas puntuales (por ahora solo en español), organizado en una grilla para su fácil lectura.</p>
+  <p>Por el momento, sólo sirve a fines personales y de mis compañeros.</p>
   <b>Material de estudio disponible:</b>
   <ul>
     {topics.map(topic => (
