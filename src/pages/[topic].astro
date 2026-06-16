@@ -13,6 +13,51 @@ const { topic } = Astro.params;
 const notes = (await getCollection('notes')).filter(note => note.id.startsWith(topic));
 ---
 
+<style is:global>
+  .astro-masonry-grid {
+    display: flex;
+    margin: 0;
+    gap: 0.5rem;
+  }
+</style>
+
+<style>
+  .note-card {
+    display: block;
+    border-radius: 10px;
+    padding: 0.25rem;
+    border: 1px solid #ccc;
+  }
+
+  .note-card-content {
+    margin: 0.7rem;
+  }
+
+  .note-card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    display: block;
+    margin: 0;
+    margin-top: 0.5rem;
+    color: #0a0c10;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .note-card-title:hover::after {
+    content: '⇗';
+    margin-left: 0.1rem;
+    color: #1055ff;
+  }
+
+  .note-card-separator {
+    color: #ccc;
+    width: 20%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+</style>
+
 <Layout>
   <Masonry
     breakpointCols={{
@@ -27,10 +72,11 @@ const notes = (await getCollection('notes')).filter(note => note.id.startsWith(t
       const { Content } = await render(note);
       return (
         <div class="note-card">
-          <a href={`/${topic}/${slug}`}>
-            <h2>{note.data.title}</h2>
-          </a>
-          <Content />
+          <a href={`/${topic}/${slug}`} class="note-card-title">{note.data.title}</a>
+          <hr class="note-card-separator">
+          <div class="note-card-content">
+            <Content />
+          </div>
         </div>
       );
     })}

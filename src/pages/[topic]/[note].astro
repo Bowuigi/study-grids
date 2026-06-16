@@ -21,7 +21,17 @@ if (!entry) throw new Error(`Note not found ${topic}/${noteSlug}`);
 const { Content } = await render(entry);
 ---
 
+<style>
+  .note-title {
+    text-align: center;
+    font-weight: 500;
+    font-size: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+</style>
+
 <Layout>
-  <h1>{entry.data.title}</h1>
+  <div class="note-title">{entry.data.title}</div>
   <Content />
 </Layout>
