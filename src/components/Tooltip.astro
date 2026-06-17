@@ -1,8 +1,7 @@
 ---
-// Tooltip.astro
 export interface Props {
-  text: string;      // visible trigger text
-  content: string;   // hidden content shown inside the popup
+  visible: string;
+  hidden: string;
 }
 
 const { hidden, visible } = Astro.props;
@@ -67,13 +66,12 @@ const { hidden, visible } = Astro.props;
 </style>
 
 <script>
-  // Vanilla JavaScript – runs after the component is mounted
   document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('.tooltip-container');
 
     containers.forEach((container) => {
-      const trigger = container.querySelector('.tooltip-trigger');
-      const popup = container.querySelector('.tooltip-popup');
+      const trigger = container.querySelector('.tooltip-trigger') as HTMLElement;
+      const popup = container.querySelector('.tooltip-popup') as HTMLElement;
 
       let isOpen = false;
 
@@ -100,8 +98,8 @@ const { hidden, visible } = Astro.props;
       });
 
       // Close when clicking outside the container
-      document.addEventListener('click', (e) => {
-        if (isOpen && !container.contains(e.target)) {
+      document.addEventListener('click', (e: PointerEvent) => {
+        if (isOpen && !container.contains(e.target as Node)) {
           close();
         }
       });
