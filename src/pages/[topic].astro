@@ -11,6 +11,16 @@ export async function getStaticPaths() {
 
 const { topic } = Astro.params;
 const notes = (await getCollection('notes')).filter(note => note.id.startsWith(topic));
+
+const renderedNotes = await Promise.all(notes.map(async note => {
+  const slug = note.id.split('/')[1];
+  const { Content } = await render(note);
+  return {
+    slug,
+    title: note.data.title,
+    Content,
+  }
+}));
 ---
 
 <style is:global>
@@ -67,18 +77,14 @@ const notes = (await getCollection('notes')).filter(note => note.id.startsWith(t
     }}
     sortByHeight={true}
   >
-    {notes.map(async note => {
-      const slug = note.id.split('/')[1];
-      const { Content } = await render(note);
-      return (
-        <div class="note-card">
-          <a href={`/${topic}/${slug}`} class="note-card-title">{note.data.title}</a>
-          <hr class="note-card-separator">
-          <div class="note-card-content">
-            <Content />
-          </div>
+    {renderedNotes.map(({ slug, title, Content }) => (
+      <div class="note-card">
+        <a href={`/${topic}/${slug}`} class="note-card-title">{title}</a>
+        <hr class="note-card-separator">
+        <div class="note-card-content">
+          <Content />
         </div>
-      );
-    })}
+      </div>
+    ))}
   </Masonry>
 </Layout>

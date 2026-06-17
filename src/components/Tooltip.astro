@@ -1,0 +1,110 @@
+---
+// Tooltip.astro
+export interface Props {
+  text: string;      // visible trigger text
+  content: string;   // hidden content shown inside the popup
+}
+
+const { hidden, visible } = Astro.props;
+---
+
+<div class="tooltip-container">
+  <span class="tooltip-trigger" role="button" tabindex="0">
+    {visible}
+  </span>
+  <div class="tooltip-popup hidden">
+    {hidden}
+  </div>
+</div>
+
+<style>
+  .tooltip-container {
+    display: inline-block;
+    position: relative;
+  }
+
+  .tooltip-trigger {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    user-select: none;
+  }
+
+  .tooltip-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 150px;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    font-size: 0.9rem;
+    color: #24292f;
+    transition: opacity 0.15s ease;
+  }
+
+  .tooltip-popup.hidden {
+    display: none;
+  }
+
+  .tooltip-popup::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 20px;
+    border: 6px solid transparent;
+    border-bottom-color: #d0d7de;
+  }
+
+  .tooltip-popup::after {
+    content: '';
+    position: absolute;
+    bottom: calc(100% - 1px);
+    left: 20px;
+    border: 5px solid transparent;
+    border-bottom-color: #ffffff;
+  }
+</style>
+
+<script>
+  // Vanilla JavaScript – runs after the component is mounted
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.tooltip-container');
+
+    containers.forEach((container) => {
+      const trigger = container.querySelector('.tooltip-trigger');
+      const popup = container.querySelector('.tooltip-popup');
+
+      let isOpen = false;
+
+      function open() {
+        popup.classList.remove('hidden');
+        isOpen = true;
+      }
+
+      function close() {
+        popup.classList.add('hidden');
+        isOpen = false;
+      }
+
+      // Toggle on trigger click
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent the document click from closing it immediately
+        if (isOpen) {
+          close();
+        } else {
+          open();
+        }
+      });
+
+      // Close when clicking outside the container
+      document.addEventListener('click', (e) => {
+        if (isOpen && !container.contains(e.target)) {
+          close();
+        }
+      });
+    });
+  });
+</script>
