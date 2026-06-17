@@ -7,6 +7,8 @@ import { unified } from '@astrojs/markdown-remark';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://bowuigi.github.io',
+  base: '/study-grids',
   integrations: [mdx({
     syntaxHighlight: 'shiki',
     shikiConfig: { theme: 'dracula' },

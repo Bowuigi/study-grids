@@ -79,7 +79,7 @@ const renderedNotes = await Promise.all(notes.map(async note => {
   >
     {renderedNotes.map(({ slug, title, Content }) => (
       <div class="note-card">
-        <a href={`/${topic}/${slug}`} class="note-card-title">{title}</a>
+        <a href={`${import.meta.env.BASE_URL}/${topic}/${slug}`} class="note-card-title">{title}</a>
         <hr class="note-card-separator">
         <div class="note-card-content">
           <Content />
