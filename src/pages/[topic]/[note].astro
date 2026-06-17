@@ -31,7 +31,7 @@ const { Content } = await render(entry);
   }
 </style>
 
-<Layout>
+<Layout title={`${entry.data.title} en ${topic} - Material de estudio`}>
   <div class="note-title">{entry.data.title}</div>
   <Content />
 </Layout>
